@@ -1,0 +1,24 @@
+name: Frontend CI
+
+on:
+  push:
+    branches:
+      - main
+      - 'feature/**'
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check required frontend files
+        run: |
+          test -f index.html
+          test -d css
+          test -d js
