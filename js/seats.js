@@ -1,79 +1,119 @@
-function renderSeats(theater) {
+async function loadSeats(showingId, showing) {
     const seatMaps = document.getElementById("theater-seat-maps");
+    const seatsMessage = document.getElementById("seats-message");
 
-    // Opret et kort til salen
+    seatMaps.replaceChildren();
+    seatsMessage.textContent = "Henter sæder...";
+
+    try {
+        const response = await fetch(
+            `http://localhost:8080/api/showings/${showingId}/seats`
+    );
+
+if (!response.ok) {
+    throw new Error("Kunne ikke hente sæderne.");
+}
+
+const seats = await response.json();
+
+renderSeats(seats, showing);
+seatsMessage.textContent = "";
+} catch (error) {
+    seatsMessage.textContent = error.message;
+    console.error("Fejl ved hentning af sæder:", error);
+}
+}
+
+function renderSeats(seats, showing) {
+    const seatMaps = document.getElementById("theater-seat-maps");
+    seatMaps.replaceChildren();
+
+    // Opret et kort til forestillingen
     const theaterCard = document.createElement("section");
     theaterCard.classList.add("theater-card");
 
     const title = document.createElement("h3");
-    title.textContent = theater.name;
-
+    title.textContent = `${showing.movieTitle} – ${showing.theaterName}`;
     theaterCard.appendChild(title);
 
     // Opret lærredet
     const screen = document.createElement("div");
     screen.classList.add("cinema-screen");
     screen.textContent = "LÆRRED";
-
     theaterCard.appendChild(screen);
 
     // Opret container til sæderækkerne
     const seatMap = document.createElement("div");
     seatMap.classList.add("seat-map");
 
-    // Antal sæder i hver række
-    seatMap.style.setProperty(
-        "--seat-count",
-        theater.seatsPerRow
-    );
+    // Saml sæderne efter rækkenummer
+    const rows = new Map();
 
-    // Gennemløb alle rækker
-    for (let row = 1; row <= theater.rowCount; row++) {
+    seats.forEach(seat => {
+        if (!rows.has(seat.rowNumber)) {
+            rows.set(seat.rowNumber, []);
+        }
+
+        rows.get(seat.rowNumber).push(seat);
+    });
+
+    // Tegn hver sæderække
+    rows.forEach((rowSeats, rowNumber) => {
         const seatRow = document.createElement("div");
         seatRow.classList.add("seat-row");
 
-        // Rækkenummer til venstre
         const leftLabel = document.createElement("span");
         leftLabel.classList.add("row-label");
-        leftLabel.textContent = row;
+        leftLabel.textContent = rowNumber;
 
-        // Container til sæderne i rækken
-        const seats = document.createElement("div");
-        seats.classList.add("seats");
+        const seatContainer = document.createElement("div");
+        seatContainer.classList.add("seats");
+        seatContainer.style.setProperty("--seat-count", rowSeats.length);
 
-        // Opret hvert sæde i rækken
-        for (
-            let seatNumber = 1;
-            seatNumber <= theater.seatsPerRow;
-            seatNumber++
-        ) {
+        rowSeats.forEach(seatData => {
             const seat = document.createElement("button");
-
             seat.type = "button";
-            seat.classList.add("seat", "seat-available");
+            seat.classList.add("seat");
 
-            seat.title = `Række ${row}, sæde ${seatNumber}`;
-
+            seat.title = `Række ${seatData.rowNumber}, sæde ${seatData.seatNumber}`;
             seat.setAttribute(
                 "aria-label",
-                `Række ${row}, sæde ${seatNumber}`
+                `Række ${seatData.rowNumber}, sæde ${seatData.seatNumber}`
             );
+            seat.setAttribute("aria-pressed", "false");
 
-            seats.appendChild(seat);
-        }
+            if (seatData.reserved) {
+                // Sædet er allerede reserveret
+                seat.classList.add("seat-reserved");
+                seat.disabled = true;
+                seat.title += " – reserveret";
+            } else {
+                // Sædet er ledigt
+                seat.classList.add("seat-available");
 
-        // Rækkenummer til højre
+                seat.addEventListener("click", () => {
+                    const selected = seat.classList.toggle("seat-selected");
+                    seat.setAttribute("aria-pressed", String(selected));
+                });
+            }
+
+            seatContainer.appendChild(seat);
+        });
+
         const rightLabel = document.createElement("span");
         rightLabel.classList.add("row-label");
-        rightLabel.textContent = row;
+        rightLabel.textContent = rowNumber;
 
-        seatRow.appendChild(leftLabel);
-        seatRow.appendChild(seats);
-        seatRow.appendChild(rightLabel);
-
+        seatRow.append(leftLabel, seatContainer, rightLabel);
         seatMap.appendChild(seatRow);
-    }
+    });
 
     theaterCard.appendChild(seatMap);
+
+    const legend = document.createElement("p");
+    legend.classList.add("seat-legend");
+    legend.textContent = "Grøn = ledigt · Rød = reserveret · Blå = valgt";
+    theaterCard.appendChild(legend);
+
     seatMaps.appendChild(theaterCard);
 }

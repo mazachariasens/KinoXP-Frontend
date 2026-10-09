@@ -25,7 +25,12 @@
     width: 100%;
     aspect-ratio: 1 / 1;
     max-height: 20px;
+    min-width: 0;
+    padding: 0;
+    border: none;
     border-radius: 4px 4px 2px 2px;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
 }
 
 .seat-available {
@@ -34,8 +39,29 @@
 
 .seat-reserved {
     background-color: #d9534f;
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
+.seat-selected {
+    background-color: #3478db;
+    outline: 2px solid #1d4ed8;
+    outline-offset: 1px;
 }
 
 .seat-unavailable {
     background-color: #a1a1aa;
+    cursor: not-allowed;
+}
+
+.seat-legend {
+    text-align: center;
+    margin-top: 20px;
+    color: #343943;
+    font-size: 14px;
+}
+
+.row-label {
+    font-size: 12px;
+    text-align: center;
 }

@@ -1,19 +1,24 @@
-const message = document.getElementById("message");
-const showingsList = document.getEelementbyId("showings-list");
+const message = document.getElementById("showings-message");
+const showingsList = document.getElementById("showings-list");
+
 fetch("http://localhost:8080/api/showings").then(response =>{
     if(!response.ok){
         throw new Error("Kunne ikke hente forestillinger. ");
     }
+
     return response.json();
 })
 .then(showings=>{
     message.textContent = "";
+    showingsList.replaceChildren();
+
     if(showings.length === 0) {
         message.textContent = "Der er ingen forestillinger. ";
         return;
+
     }
-    showings.forEach(showings => {
-        const cancelled = showing.status === "CANCALLED";
+    showings.forEach(showing => {
+        const cancelled = showing.status === "CANCELLED";
         const row = document.createElement("tr");
         const movie = document.createElement("td");
         movie.textContent = showing.movieTitle;
@@ -28,8 +33,14 @@ fetch("http://localhost:8080/api/showings").then(response =>{
 
         const action = document.createElement("td");
         const button = document.createElement("button");
-        button.textContent = cancelled ? "Aflyst" : "Vælg";
+
+        button.type = "button";
+        button.textContent = cancelled ? "Aflyst" : "Vælg sæder";
         button.disabled = cancelled;
+
+        button.addEventListener("click", () => {
+            loadSeats(showing.showingId, showing);
+        });
         action.appendChild(button);
 
         row.append(movie, theater, time, status, action);
@@ -38,4 +49,5 @@ fetch("http://localhost:8080/api/showings").then(response =>{
 })
     .catch(error => {
         message.textContent = error.message;
+        console.error("Fejl ved hentning af forestillinger: ", error);
     });
