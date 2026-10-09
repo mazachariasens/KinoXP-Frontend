@@ -12,6 +12,7 @@
 
 <h1>KinoXP</h1>
 
+<!-- Filmoversigt -->
 <table>
     <thead>
     <tr>
@@ -28,7 +29,47 @@
 
 <p id="empty-message"></p>
 
+
+<!-- Opret film -->
+<h2>Opret film</h2>
+
+<form id="create-movie-form">
+
+    <div>
+        <label for="title">Titel</label>
+        <input type="text" id="title" required>
+    </div>
+
+    <div>
+        <label for="category">Kategori</label>
+        <input type="text" id="category" required>
+    </div>
+
+</form>
+
+
+<!-- Biografsale -->
+<h1>Biografsale</h1>
+
+<table>
+    <thead>
+    <tr>
+        <th>Navn</th>
+        <th>Rækker</th>
+        <th>Sæder pr. række</th>
+        <th>Kapacitet</th>
+    </tr>
+    </thead>
+
+    <tbody id="theater-list">
+    </tbody>
+</table>
+
+<p id="theater-empty-message"></p>
+
+
 <script src="js/movie.js"></script>
 <script src="js/theater.js"></script>
+
 </body>
 </html>
