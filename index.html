@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="da">
+<html lang="da" xmlns="http://www.w3.org/1999/html">
 
 <head>
     <meta charset="UTF-8">
@@ -43,13 +43,25 @@
 
 <div>
     <label for="category"> Kategori</label>
-    <input type="text" id="category" recuired>
+    <input type="text" id="category" required>
 </div>
 
 <div>
     <label for="ageLimit">Aldersgrænse</label>
     <input type="number" id="ageLimit" min="0" step="1" required>
 </div>
+    <div>
+    <label for="duration">Varighed i minutter</label>
+    <input type="number" id="duration" min="1" step="1" required>
+    </div>
+
+    <button type="submit" id="create-movie-button">
+    Opret film
+    </button>
+
+</form>
+
+<p id="create-movie-message" role="status"></p>
 
 <h1>Biografsale</h1>
 

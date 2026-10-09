@@ -16,13 +16,31 @@ form.addEventListener("submit", async (event) => {
     message.textContent = "Gemmer film...";
 
     try {
-        const response = await fetch("http://localhost:8080/api/movies"), {
+        const response = await fetch("http://localhost:8080/api/movies", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
+            body: JSON.stringify(movie)
+        });
+
+        if (!response.ok) {
+            const error = await response.json().catch(() => ({}));
+
+            throw new Error(error.message || "Filmen kunne ikke oprettes."
+            );
+
         }
+
+        const savedMovie = await response.json();
+
+        form.reset();
+        message.textContent = `Filmen "${savedMovie.title}" er oprettet.`;
+    } catch (error) {
+        message.textContent = error.message;
+
+    } finally {
+        button.disabled = false;
     }
 
-
-}
+});
