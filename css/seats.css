@@ -1,0 +1,41 @@
+
+.seat-map {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.seat-row {
+    display: grid;
+    grid-template-columns: 18px minmax(0, 1fr) 18px;
+    align-items: center;
+    gap: 4px;
+}
+
+.seats {
+    display: grid;
+    grid-template-columns: repeat(
+        var(--seat-count, 12),
+        minmax(0, 1fr)
+    );
+    gap: 3px;
+}
+
+.seat {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    max-height: 20px;
+    border-radius: 4px 4px 2px 2px;
+}
+
+.seat-available {
+    background-color: #269765;
+}
+
+.seat-reserved {
+    background-color: #d9534f;
+}
+
+.seat-unavailable {
+    background-color: #a1a1aa;
+}
