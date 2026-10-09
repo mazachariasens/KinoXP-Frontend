@@ -1,0 +1,28 @@
+
+.theater-list {
+    display: grid;
+    grid-template-columns: repeat(
+        auto-fit,
+        minmax(320px, 1fr)
+    );
+    gap: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.theater-card {
+    background: white;
+    border-radius: 12px;
+    padding: 24px 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.cinema-screen {
+    width: 75%;
+    margin: 0 auto 28px;
+    padding: 8px 0;
+    text-align: center;
+    background: #343943;
+    color: white;
+    border-radius: 4px 4px 14px 14px;
+}

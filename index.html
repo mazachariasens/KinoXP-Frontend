@@ -6,13 +6,13 @@
     <title>KinoXP</title>
 
     <link rel="stylesheet" href="css/style.css">
-
 </head>
 
 <body>
 
 <h1>KinoXP</h1>
 
+<!-- Filmoversigt -->
 <table>
     <thead>
     <tr>
@@ -29,16 +29,26 @@
 
 <p id="empty-message"></p>
 
+
+<!-- Opret film -->
 <h2>Opret film</h2>
 
-<form id="create-movie-form"></form>
-<div>
-    <label for="title">Titel</label>
-    <input type="text" id="title" required>
-</div>
+<form id="create-movie-form">
 
-<label for="category"> Kategori</label>
-<input type="text" id="category" recuired>
+    <div>
+        <label for="title">Titel</label>
+        <input type="text" id="title" required>
+    </div>
+
+    <div>
+        <label for="category">Kategori</label>
+        <input type="text" id="category" required>
+    </div>
+
+</form>
+
+
+<!-- Biografsale -->
 <h1>Biografsale</h1>
 
 <table>
@@ -57,7 +67,9 @@
 
 <p id="theater-empty-message"></p>
 
+
 <script src="js/movie.js"></script>
 <script src="js/theater.js"></script>
+
 </body>
 </html>
