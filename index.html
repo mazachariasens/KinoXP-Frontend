@@ -6,6 +6,7 @@
     <title>KinoXP</title>
 
     <link rel="stylesheet" href="css/style.css">
+
 </head>
 
 <body>
@@ -40,15 +41,16 @@
         <input type="text" id="title" required>
     </div>
 
-    <div>
-        <label for="category">Kategori</label>
-        <input type="text" id="category" required>
-    </div>
+<div>
+    <label for="category"> Kategori</label>
+    <input type="text" id="category" recuired>
+</div>
 
-</form>
+<div>
+    <label for="ageLimit">Aldersgrænse</label>
+    <input type="number" id="ageLimit" min="0" step="1" required>
+</div>
 
-
-<!-- Biografsale -->
 <h1>Biografsale</h1>
 
 <table>
@@ -70,6 +72,7 @@
 
 <script src="js/movie.js"></script>
 <script src="js/theater.js"></script>
-
+<script src="js/create-movie.js"></script>
 </body>
+
 </html>
