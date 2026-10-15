@@ -7,7 +7,7 @@ async function loadSeats(showingId, showing) {
 
     try {
         const response = await fetch(
-            `http://localhost:8080/api/showings/${showingId}/seats`
+            `/api/showings/${showingId}/seats`
     );
 
 if (!response.ok) {

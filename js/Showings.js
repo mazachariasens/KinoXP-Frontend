@@ -1,7 +1,7 @@
 const message = document.getElementById("showings-message");
 const showingsList = document.getElementById("showings-list");
 
-fetch("http://localhost:8080/api/showings").then(response =>{
+fetch("/api/showings").then(response =>{
     if(!response.ok){
         throw new Error("Kunne ikke hente forestillinger. ");
     }

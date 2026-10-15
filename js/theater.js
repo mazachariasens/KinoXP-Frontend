@@ -1,6 +1,6 @@
 console.log("theater.js virker!");
 
-fetch("http://localhost:8080/api/theaters")
+fetch("/api/theaters")
     .then(response => response.json())
     .then(theaters => {
 
