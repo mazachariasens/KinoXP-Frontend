@@ -1,16 +1,34 @@
-async function loadSeats(showingId, showing) {
-    const seatMaps = document.getElementById("theater-seat-maps");
-    const seatsMessage = document.getElementById("seats-message");
+let currentShowingId = null; // Variabel til at holde styr på den aktuelle forestilling
+let currentShowing = null;
+const selectedSeatsIds = new Set(); // Brug et Set til at holde styr på valgte sæder
 
-    seatMaps.replaceChildren();
-    seatsMessage.textContent = "Henter sæder...";
+const reservationSection = document.getElementById("reservation-section"); // Sektionen til reservation
+const reservationForm = document.getElementById("reservation-form"); // Formularen til reservation
+const reservationMessage = document.getElementById("reservation-message"); // Element til at vise besked
+const selectedSeatsMessage = document.getElementById("selected-seats-message"); // Element til at vise valgte sæder
+const reservationButton = document.getElementById("reservation-button"); // Knappen til at reservere
 
-    try {
+async function loadSeats(showingId, showing) { // Funktion til at hente og vise sæder for en given forestilling.
+    const seatMaps = document.getElementById("theater-seat-maps"); // Elementet, hvor sædekortene skal vises.
+    const seatsMessage = document.getElementById("seats-message"); // Elementet, hvor beskeder om sæder skal vises.
+
+    currentShowingId = showingId; // Opdater den aktuelle forestilling
+    currentShowing = showing; // Opdater den aktuelle forestilling.
+
+    selectedSeatsIds.clear(); // Ryd tidligere valgte sæder så snart en ny forestilling vælges.
+    reservationSection.hidden = true; // Skjul reservationssektionen, indtil sæderne er hentet.
+    reservationMessage.textContent = ""; // Ryd tidligere beskeder.
+    reservationForm.reset(); // Nulstil formularen.
+
+    seatMaps.replaceChildren(); // Ryd tidligere sædekort
+    seatsMessage.textContent = "Henter sæder..."; // Vis besked om, at sæderne hentes
+
+    try { // Hent sæderne fra API'et
         const response = await fetch(
             `/api/showings/${showingId}/seats`
     );
 
-if (!response.ok) {
+if (!response.ok) { // Hvis svaret ikke er OK, kast en fejl
     throw new Error("Kunne ikke hente sæderne.");
 }
 
@@ -26,6 +44,7 @@ seatsMessage.textContent = "";
 
 function renderSeats(seats, showing) {
     const seatMaps = document.getElementById("theater-seat-maps");
+
     seatMaps.replaceChildren();
 
     // Opret et kort til forestillingen
@@ -57,8 +76,13 @@ function renderSeats(seats, showing) {
         rows.get(seat.rowNumber).push(seat);
     });
 
-    // Tegn hver sæderække
-    rows.forEach((rowSeats, rowNumber) => {
+    //Sorter rækker og sæder, så de vises i rigtig rækkefølge.
+    const sortedRows = [...rows.entries()]
+        .sort((a, b) => a[0] - b[0]);
+
+    sortedRows.forEach(([rowNumber, rowSeats]) => {
+        rowSeats.sort((a, b) => a.seatNumber - b.seatNumber);
+
         const seatRow = document.createElement("div");
         seatRow.classList.add("seat-row");
 
@@ -70,16 +94,20 @@ function renderSeats(seats, showing) {
         seatContainer.classList.add("seats");
         seatContainer.style.setProperty("--seat-count", rowSeats.length);
 
+
         rowSeats.forEach(seatData => {
             const seat = document.createElement("button");
+
             seat.type = "button";
             seat.classList.add("seat");
+            seat.textContent = seatData.seatNumber;
 
             seat.title = `Række ${seatData.rowNumber}, sæde ${seatData.seatNumber}`;
+
             seat.setAttribute(
                 "aria-label",
-                `Række ${seatData.rowNumber}, sæde ${seatData.seatNumber}`
-            );
+                `Række ${seatData.rowNumber}, sæde ${seatData.seatNumber}`);
+
             seat.setAttribute("aria-pressed", "false");
 
             if (seatData.reserved) {
@@ -91,9 +119,21 @@ function renderSeats(seats, showing) {
                 // Sædet er ledigt
                 seat.classList.add("seat-available");
 
-                seat.addEventListener("click", () => {
-                    const selected = seat.classList.toggle("seat-selected");
-                    seat.setAttribute("aria-pressed", String(selected));
+                seat.addEventListener("click", () => { // programmet "lytter" om brugeren klikker på et sæde.
+                    if (selectedSeatsIds.has(seatData.seatId)) {
+                        selectedSeatsIds.delete(seatData.seatId);
+                        seat.classList.remove("seat-selected");
+                        seat.classList.add("seat-available");
+                        seat.setAttribute("aria-pressed", "false");
+                    } else {
+                        selectedSeatsIds.add(seatData.seatId);
+                        seat.classList.add("seat-selected");
+                        seat.classList.remove("seat-available");
+                        seat.setAttribute("aria-pressed", "true");
+                    }
+
+                    updateSelectedSeats();
+
                 });
             }
 
@@ -113,7 +153,79 @@ function renderSeats(seats, showing) {
     const legend = document.createElement("p");
     legend.classList.add("seat-legend");
     legend.textContent = "Grøn = ledigt · Rød = reserveret · Blå = valgt";
-    theaterCard.appendChild(legend);
 
+    theaterCard.appendChild(legend);
     seatMaps.appendChild(theaterCard);
 }
+
+function updateSelectedSeats() {
+    const count = selectedSeatsIds.size;
+
+    selectedSeatsMessage.textContent = count === 0
+    ? "Du har ikke valgt nogen sæder."
+        : `Du har valgt ${count} sæde(r).`;
+
+    reservationSection.hidden = count === 0;
+    reservationMessage.textContent = "";
+}
+
+// Send reservation til backend
+reservationForm.addEventListener("submit", async event => {
+    event.preventDefault();
+
+    if (currentShowingId === null || selectedSeatsIds.size === 0) {
+        reservationMessage.textContent = "Vælg en forestilling og mindst ét sæde.";
+        return;
+    }
+
+    const request = {
+        showingId: currentShowingId,
+        seatIds: [...selectedSeatsIds],
+        customerName:
+        document.getElementById("customer-name").value.trim(),
+        customerPhone: document.getElementById("customer-phone").value.trim()
+    };
+
+    reservationButton.disabled = true;
+    reservationMessage.textContent = "Opretter reservation...";
+
+    try {
+        const response = await fetch(
+            `/api/reservations`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(request)
+            }
+        );
+
+        if (!response.ok) {
+            const error = await response.json().catch(() => ({}));
+
+            throw new Error(error.message || "Reservationen kunne ikke gennemføres. Kontrollér, om sæderne stadig er ledige.");
+        }
+
+        const reservation = await response.json();
+
+        selectedSeatsIds.clear();
+        reservationForm.reset();
+        reservationSection.hidden = true;
+
+        reservationMessage.textContent =
+            `Reservation #${reservation.reservationId} er oprettet.`;
+
+        //Hent den nyeste status fra backend
+        await loadSeats(currentShowingId, currentShowing);
+
+        // loadSeats nulstiller beskeden, så vis bekræftelsen igen.
+        reservationMessage.textContent = `Reservation #${reservation.reservationId} er oprettet.`;
+
+    } catch (error) {
+        reservationMessage.textContent = error.message;
+        console.error("Fejl ved reservation:", error);
+    } finally {
+        reservationButton.disabled = false;
+    }
+});
