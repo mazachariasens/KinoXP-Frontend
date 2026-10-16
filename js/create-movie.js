@@ -36,6 +36,9 @@ form.addEventListener("submit", async (event) => {
 
         form.reset();
         message.textContent = `Filmen "${savedMovie.title}" er oprettet.`;
+
+        await loadMovies();
+
     } catch (error) {
         message.textContent = error.message;
 
