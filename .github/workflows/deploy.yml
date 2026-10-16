@@ -1,0 +1,17 @@
+name: Deploy fra frontend
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    uses: mazachariasens/KinoXP-Backend/.github/workflows/deploy.yml@main
+    secrets:
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+      AZURE_WEBHOOK_URL: ${{ secrets.AZURE_WEBHOOK_URL }}
