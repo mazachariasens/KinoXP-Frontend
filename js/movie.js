@@ -1,6 +1,6 @@
 alert("movie.js virker");
 
-fetch("http://localhost:8080/api/movies")
+fetch("/api/movies")
     .then(response => response.json())
     .then(movies => {
 

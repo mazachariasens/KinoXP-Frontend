@@ -16,7 +16,7 @@ form.addEventListener("submit", async (event) => {
     message.textContent = "Gemmer film...";
 
     try {
-        const response = await fetch("http://localhost:8080/api/movies", {
+        const response = await fetch("/api/movies", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
