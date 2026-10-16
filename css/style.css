@@ -1,20 +1,174 @@
+
+/* Grundlæggende sideopsætning */
+
 body {
     font-family: Arial, sans-serif;
+    background-color: #f3f4f7;
+    color: #292d38;
+    margin: 0;
+    padding: 0;
+    line-height: 1.5;
+}
 
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f5f5f5;
-        margin: 0;
-        padding: 0;
+.page-header {
+    background-color: #252b3b;
+    color: white;
+    padding: 24px 32px;
+}
+
+.page-header h1 {
+    margin: 0;
+}
+
+.page-header p {
+    margin: 4px 0 0;
+    color: #d3d7e0;
+}
+
+/* Sektioner på siden */
+
+.panel {
+    max-width: 1200px;
+    margin: 28px auto;
+    padding: 24px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+h2 {
+    margin-top: 0;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.section-header p {
+    margin: 4px 0 0;
+    color: #686e7b;
+}
+
+/* Tabeller */
+
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+}
+
+thead {
+    background: #343943;
+    color: white;
+}
+
+th,
+td {
+    padding: 14px;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+tbody tr:hover {
+    background-color: #f7f8fa;
+}
+
+/* Formularer */
+
+.showing-form {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+    align-items: end;
+}
+
+.showing-form div {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+label {
+    font-weight: bold;
+}
+
+input,
+select {
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    padding: 11px;
+    border: 1px solid #cbd0da;
+    border-radius: 6px;
+    font: inherit;
+    background: white;
+}
+
+input:focus,
+select:focus {
+    outline: 2px solid #7b91c7;
+    outline-offset: 1px;
+}
+
+/* Knapper */
+
+button {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 6px;
+    background: #343943;
+    color: white;
+    font: inherit;
+    cursor: pointer;
+}
+
+button:hover:not(:disabled) {
+    background: #4b5260;
+}
+
+button:disabled {
+    background: #d1d5db;
+    color: #6b7280;
+    cursor: not-allowed;
+}
+
+#showings-message,
+#create-showing-message {
+    margin: 12px 0;
+}
+
+/* Mindre skærme */
+
+@media (max-width: 800px) {
+    .panel {
+        margin: 16px;
+        padding: 16px;
     }
 
-    h1 {
-        text-align: center;
-        margin-top: 50px;
+    .page-header {
+        padding: 20px 16px;
     }
 
-    button {
-        padding: 10px 20px;
-        cursor: pointer;
+    .showing-form {
+        grid-template-columns: 1fr;
+    }
+
+    .section-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    th,
+    td {
+        padding: 10px;
     }
 }
