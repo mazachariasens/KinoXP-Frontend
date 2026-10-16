@@ -49,8 +49,39 @@
 </table>
 
 <h2>Vælg sæder</h2>
+
 <div id="theater-seat-maps"></div>
 <p id="seats-message" role="status"></p>
+
+<section id="reservation-section" hidden>
+    <h2>Gennemfør reservation</h2>
+
+    <p id="selected-seats-message"></p>
+
+    <form id="reservation-form">
+        <div>
+            <label for="customer-name">Navn</label>
+            <input
+                type="text"
+                id="customer-name"
+                required
+                >
+        </div>
+        <label for="customer-phone">Telefonnummer</label>
+        <input
+            type="tel"
+            id="customer-phone"
+            required
+            >
+        </div>
+
+        <button type="submit" id="reservation-button">
+            Reserver sæder
+        </button>
+    </form>
+
+    <p id="reservation-message" role="status"></p>
+</section>
 
 <!-- Opret film -->
 <h2>Opret film</h2>
