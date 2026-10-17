@@ -1,4 +1,4 @@
-const message = document.getElementById("showings-message");
+const showingsMessage = document.getElementById("showings-message");
 const showingsList = document.getElementById("showings-list");
 const refreshButton = document.getElementById("refresh-showings");
 
@@ -11,11 +11,11 @@ async function loadShowings() {
         return response.json();
     })
         .then(showings => {
-            message.textContent = "";
+            showingsMessage.textContent = "";
             showingsList.replaceChildren();
 
             if (showings.length === 0) {
-                message.textContent = "Der er ingen forestillinger. ";
+                showingsMessage.textContent = "Der er ingen forestillinger. ";
                 return;
 
             }
@@ -49,7 +49,7 @@ async function loadShowings() {
                 showingsList.appendChild(row);
             });
         }).catch(error => {
-        message.textContent = error.message;
+        showingsMessage.textContent = error.message;
         console.error("Fejl ved hentning af forestillinger: ", error);
     });
 }

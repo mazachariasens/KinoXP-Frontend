@@ -1,6 +1,6 @@
 
-function loadMovies() {
-   return fetch("/api/movies")
+function loadMovieList() {
+    return fetch("/api/movies")
         .then(response => response.json())
         .then(movies => {
 
@@ -35,4 +35,4 @@ function loadMovies() {
         });
 
 }
-loadMovies();
+loadMovieList();

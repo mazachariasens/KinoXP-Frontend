@@ -1,7 +1,7 @@
 console.log("theater.js virker!");
 
 // Hent biografsale fra API'et og vis dem i tabellen - vi laver et promise, som henter data fra API'et og derefter opdaterer DOM'en med biografsalene.
-fetch("http://localhost:8080/api/theaters")
+fetch("/api/theaters")
     .then(response => response.json())
     .then(theaters => {
 
