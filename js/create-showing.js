@@ -22,7 +22,7 @@ async function loadMovies() {
 
     movies.forEach(movie => {
         movieSelect.add(
-            new Option(movie.title, movie.Id)
+            new Option(movie.title, movie.id)
         );
     });
 }
@@ -68,7 +68,7 @@ createShowingForm.addEventListener("submit", async event => {
     const request = {
         movieId: Number(movieSelect.value),
         theaterId: Number(theaterSelect.value),
-        startsAt: startsAtInput.value
+        startsAt: startsAtInput.value + ":00"
     };
 
     createShowingButton.disabled = true;
