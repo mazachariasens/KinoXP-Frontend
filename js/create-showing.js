@@ -22,7 +22,7 @@ async function loadMovies() {
 
     movies.forEach(movie => {
         movieSelect.add(
-            new Option(movie.title, movie.movieId)
+            new Option(movie.title, movie.Id)
         );
     });
 }
@@ -57,7 +57,7 @@ async function initializeShowingForm() {
         ]);
     } catch (error) {
         createShowingMessage.textContent = error.message;
-        console.error(error);
+        console.error("Fejl ved indlæsning af formular: ", error);
     }
 }
 
@@ -87,7 +87,8 @@ createShowingForm.addEventListener("submit", async event => {
             const error = await response.json().catch(() => ({}));
 
             throw new Error(
-                error.error || error.message ||
+                error.error ||
+                error.message ||
                 "Kunne ikke oprette forestillingen."
             );
         }
