@@ -84,12 +84,12 @@ createShowingForm.addEventListener("submit", async event => {
         });
 
         if (!response.ok) {
-            const error = await response.json().catch(() => ({}));
+            const errorText = await response.text();
+
+            console.error("Backend-fejl:", errorText);
 
             throw new Error(
-                error.error ||
-                error.message ||
-                "Kunne ikke oprette forestillingen."
+                `HTTP ${response.status}: ${errorText}`
             );
         }
 

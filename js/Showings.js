@@ -34,7 +34,7 @@ async function loadShowings() {
         const response = await fetch("/api/showings");
 
         if (!response.ok) {
-            throw new Wrror("Kunne ikke hente forestillinger. Prøv igen.");
+            throw new Error("Kunne ikke hente forestillinger. Prøv igen.");
         }
 
         const showings = await response.json();
