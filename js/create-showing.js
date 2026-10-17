@@ -1,10 +1,10 @@
 
-const form = document.getElementById("create-showing-form");
+const createShowingForm = document.getElementById("create-showing-form");
 const movieSelect = document.getElementById("showing-movie");
 const theaterSelect = document.getElementById("showing-theater");
 const startsAtInput = document.getElementById("showing-starts-at");
-const message = document.getElementById("create-showing-message");
-const submitButton = document.getElementById("create-showing-button");
+const createShowingMessage = document.getElementById("create-showing-message");
+const createShowingButton = document.getElementById("create-showing-button");
 
 // Hent eksisterende film og vis dem i dropdown-listen.
 async function loadMovies() {
@@ -56,13 +56,13 @@ async function initializeShowingForm() {
             loadTheaters()
         ]);
     } catch (error) {
-        message.textContent = error.message;
+        createShowingMessage.textContent = error.message;
         console.error(error);
     }
 }
 
 // Opret forestillingen i backend.
-form.addEventListener("submit", async event => {
+createShowingForm.addEventListener("submit", async event => {
     event.preventDefault();
 
     const request = {
@@ -71,8 +71,8 @@ form.addEventListener("submit", async event => {
         startsAt: startsAtInput.value
     };
 
-    submitButton.disabled = true;
-    message.textContent = "Opretter forestilling...";
+    createShowingButton.disabled = true;
+    createShowingMessage.textContent = "Opretter forestilling...";
 
     try {
         const response = await fetch("/api/showings", {
@@ -92,8 +92,8 @@ form.addEventListener("submit", async event => {
             );
         }
 
-        message.textContent = "Forestillingen er oprettet.";
-        form.reset();
+        createShowingMessage.textContent = "Forestillingen er oprettet.";
+        createShowingForm.reset();
 
         // Opdater forestillingsoversigten.
         if (typeof loadShowings === "function") {
@@ -101,10 +101,10 @@ form.addEventListener("submit", async event => {
         }
 
     } catch (error) {
-        message.textContent = error.message;
+        createShowingMessage.textContent = error.message;
         console.error("Fejl ved oprettelse af forestilling:", error);
     } finally {
-        submitButton.disabled = false;
+        createShowingButton.disabled = false;
     }
 });
 

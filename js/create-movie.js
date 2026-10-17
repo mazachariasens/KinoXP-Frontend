@@ -1,8 +1,8 @@
-const form = document.getElementById("create-movie-form");
-const message = document.getElementById("create-movie-message");
-const button = document.getElementById("create-movie-button");
+const createMovieForm = document.getElementById("create-movie-form");
+const createMovieMessage = document.getElementById("create-movie-message");
+const createMovieButton = document.getElementById("create-movie-button");
 
-form.addEventListener("submit", async (event) => {
+createMovieForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
     const movie = {
@@ -12,8 +12,8 @@ form.addEventListener("submit", async (event) => {
         duration: Number(document.getElementById("duration").value)
     };
 
-    button.disabled = true;
-    message.textContent = "Gemmer film...";
+    createMovieButton.disabled = true;
+    createMovieMessage.textContent = "Gemmer film...";
 
     try {
         const response = await fetch("/api/movies", {
@@ -34,16 +34,16 @@ form.addEventListener("submit", async (event) => {
 
         const savedMovie = await response.json();
 
-        form.reset();
-        message.textContent = `Filmen "${savedMovie.title}" er oprettet.`;
+        createMovieForm.reset();
+        createMovieMessage.textContent = `Filmen "${savedMovie.title}" er oprettet.`;
 
-        await loadMovies();
+        await loadMovieList();
 
     } catch (error) {
-        message.textContent = error.message;
+        createMovieMessage.textContent = error.message;
 
     } finally {
-        button.disabled = false;
+        createMovieButton.disabled = false;
     }
 
 });
