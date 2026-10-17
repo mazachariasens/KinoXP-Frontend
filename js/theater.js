@@ -1,14 +1,23 @@
+
 console.log("theater.js virker!");
 
-// Hent biografsale fra API'et og vis dem i tabellen - vi laver et promise, som henter data fra API'et og derefter opdaterer DOM'en med biografsalene.
-fetch("/api/theaters")
-    .then(response => response.json())
-    .then(theaters => {
+async function loadTheaters() {
+    const theaterList = document.getElementById("theater-list");
+    const emptyMessage = document.getElementById("theater-empty-message");
 
-        console.log(theaters);
+    theaterList.replaceChildren();
+    emptyMessage.textContent = "Henter biografsale...";
 
-        const theaterList = document.getElementById("theater-list");
-        const emptyMessage = document.getElementById("theater-empty-message");
+    try {
+        const response = await fetch("/api/theaters");
+
+        if (!response.ok) {
+            throw new Error("Kunne ikke hente biografsale.");
+        }
+
+        const theaters = await response.json();
+
+        emptyMessage.textContent = "";
 
         if (theaters.length === 0) {
             emptyMessage.textContent = "Der findes ingen biografsale.";
@@ -16,18 +25,33 @@ fetch("/api/theaters")
         }
 
         theaters.forEach(theater => {
-            const row = document.createElement("tr");
+            const card = document.createElement("article");
+            card.classList.add("theater-card");
 
-            row.innerHTML = `
-                <td>${theater.name}</td>
-                <td>${theater.rowCount}</td>
-                <td>${theater.seatsPerRow}</td>
-                <td>${theater.capacity}</td>
-            `;
+            const title = document.createElement("h3");
+            title.textContent = theater.name;
 
-            theaterList.appendChild(row);
+            const rows = document.createElement("p");
+            rows.textContent = `Antal rækker: ${theater.rowCount}`;
+
+            const seatsPerRow = document.createElement("p");
+            seatsPerRow.textContent =
+                `Sæder pr. række: ${theater.seatsPerRow}`;
+
+            const capacity = document.createElement("p");
+            capacity.textContent =
+                `Samlet kapacitet: ${theater.capacity} sæder`;
+
+            card.append(title, rows, seatsPerRow, capacity);
+            theaterList.appendChild(card);
         });
-    })
-    .catch(error => {
+
+    } catch (error) {
+        emptyMessage.textContent =
+            "Der opstod en fejl ved hentning af biografsale.";
+
         console.error("Fejl ved hentning af biografsale:", error);
-    });
+    }
+}
+
+loadTheaters();
