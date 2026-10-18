@@ -154,6 +154,30 @@
 
 <p id="reservation-message" role="status"></p>
 
+
+<section class="panel" id="active-reservations-section" hidden>
+    <h2>Reservationer for forestillingen</h2>
+
+    <p id="active-reservations-message" role="status"></p>
+
+    <div class="table-container">
+        <table>
+            <thead>
+            <tr>
+                <th>Reservations-ID</th>
+                <th>Kundenavn</th>
+                <th>Telefonnummer</th>
+                <th>Sæder</th>
+                <th>Status</th>
+            </tr>
+            </thead>
+
+            <tbody id="active-reservations-list"></tbody>
+
+        </table>
+    </div>
+</section>
+
 <!-- Opret film -->
 <h2>Opret film</h2>
 
@@ -195,6 +219,7 @@
 <script src="js/movie.js"></script>
 <script src="js/theater.js"></script>
 <script src="js/create-movie.js"></script>
+<script src="js/active-reservations.js"></script>
 <script src="js/seats.js"></script>
 <script src="js/Showings.js"></script>
 <script src="js/create-showing.js"></script>

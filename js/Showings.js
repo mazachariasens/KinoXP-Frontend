@@ -69,7 +69,7 @@ async function loadShowings() {
                 const button = document.createElement("button");
 
                 button.type = "button";
-                button.textContent = cancelled ? "Aflyst" : "Vælg sæder";
+                button.textContent = cancelled ? "Aflyst" : "Fortag reservation";
 
                 button.disabled = cancelled;
 

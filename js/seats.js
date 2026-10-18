@@ -8,7 +8,8 @@ const reservationMessage = document.getElementById("reservation-message"); // El
 const selectedSeatsMessage = document.getElementById("selected-seats-message"); // Element til at vise valgte sæder
 const reservationButton = document.getElementById("reservation-button"); // Knappen til at reservere
 
-async function loadSeats(showingId, showing) { // Funktion til at hente og vise sæder for en given forestilling.
+async function loadSeats(showingId, showing) {// Funktion til at hente og vise sæder for en given forestilling.
+    await loadActiveReservations(showingId);
     const seatMaps = document.getElementById("theater-seat-maps"); // Elementet, hvor sædekortene skal vises.
     const seatsMessage = document.getElementById("seats-message"); // Elementet, hvor beskeder om sæder skal vises.
 
